@@ -8,6 +8,7 @@
             <blue-table [data]="templateData" #table>
                 <ng-template blueTemplate="header">
                     <tr blueTableHeaderRow sticky>
+                        <td></td>
                         <td blueTableHeaderCell>Template Name</td>
                         <td blueTableHeaderCell>Excel File Name</td>
                         <td blueTableHeaderCell>Excel File Sheets</td>
@@ -17,6 +18,11 @@
                 </ng-template>
                 <ng-template blueTemplate="body" let-row="row">
                     <tr [blueTableRow]="row">
+                        <td blueTableCell>
+                            <button blueButton class="button-link" aria-label="close">
+                                <svg blueIcon="edit" class="edit"></svg>
+                            </button>
+                        </td>
                         <td blueTableCell>{{ row.data.name }}</td>
                         <td blueTableCell>{{ row.data.templateMetadata?.FileName }}</td>
                         <td blueTableCell>
