@@ -7,9 +7,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { EmtnAuthModule } from '@moodys/emtn-ng/auth';
+import { SpreadSheetDetailComponent } from './spread-sheet-detail/spread-sheet-detail.component';
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [AppComponent, SpreadSheetDetailComponent],
     imports: [
         AppRoutingModule,
         BrowserModule,

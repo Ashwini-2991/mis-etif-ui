@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { BlueTableData } from '@moodys/blue-ng';
 import { Template } from '@app/home/types/Template';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-template-list',
@@ -14,6 +15,8 @@ export class TemplateListComponent implements OnChanges {
     @Input()
     templates: Template[] = [];
 
+    constructor(private router: Router) {}
+
     ngOnChanges(): void {
         this.processing = true;
         const templateDataTemp: BlueTableData = [];
@@ -22,5 +25,9 @@ export class TemplateListComponent implements OnChanges {
         });
         this.templateData = [...templateDataTemp];
         this.processing = false;
+    }
+
+    navigateToTemplateDetail(template: Template): void {
+        this.router.navigate(['/template/', template._id]);
     }
 }
