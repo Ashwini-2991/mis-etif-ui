@@ -1,0 +1,38 @@
+<blue-card class="mt-2">
+    <blue-card-header>
+        <h1 blueContent="header-title">Templates</h1>
+    </blue-card-header>
+    <blue-divider></blue-divider>
+    <blue-card-content>
+        <div class="w-full p-6 bg-gray-100 m-2" *ngIf="!processing && templateData.length > 0">
+            <blue-table [data]="templateData" #table>
+                <ng-template blueTemplate="header">
+                    <tr blueTableHeaderRow sticky>
+                        <td blueTableHeaderCell>Template Name</td>
+                        <td blueTableHeaderCell>Excel File Name</td>
+                        <td blueTableHeaderCell>Excel File Sheets</td>
+                        <td blueTableHeaderCell>Captured Data Points</td>
+                        <td blueTableHeaderCell>Captured Tables</td>
+                    </tr>
+                </ng-template>
+                <ng-template blueTemplate="body" let-row="row">
+                    <tr [blueTableRow]="row">
+                        <td blueTableCell>{{ row.data.name }}</td>
+                        <td blueTableCell>{{ row.data.templateMetadata.FileName }}</td>
+                        <td blueTableCell>
+                            <blue-badge
+                                class="p-1 mx-1"
+                                *ngFor="let sheetName of row.data.templateMetadata.SheetNames"
+                                [value]="sheetName"
+                            ></blue-badge>
+                        </td>
+                        <td blueTableCell>{{ row.data.capturedPoints }}</td>
+                        <td blueTableCell>{{ row.data.capturedTables }}</td>
+                    </tr>
+                </ng-template>
+            </blue-table>
+        </div>
+        <div *ngIf="!processing && templateData.length === 0">There are no templates available in the system.</div>
+        <blue-spinner class="spinner-overlay spinner-md" label="Working..." [hidden]="!processing"></blue-spinner>
+    </blue-card-content>
+</blue-card>

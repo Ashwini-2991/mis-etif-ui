@@ -1,0 +1,229 @@
+<div>
+    <blue-tabs>
+        <blue-tabs-bar>
+            <a blueTabsButton href="tab-template-list" [active]="true">Templates</a>
+            <a blueTabsButton href="tab-template-create">Create Template</a>
+        </blue-tabs-bar>
+        <blue-tabs-content id="tab-template-list">
+            <app-template-list></app-template-list>
+        </blue-tabs-content>
+        <blue-tabs-content id="tab-template-create">
+            <!-- Create Template -->
+            <blue-card class="mt-2">
+                <blue-card-header>
+                    <h1 blueContent="header-title">Create Template</h1>
+                    <ng-container blueContent="header-utils">
+                        <button blueButton (click)="submit()">Save Template</button>
+                    </ng-container>
+                </blue-card-header>
+                <blue-divider></blue-divider>
+                <blue-card-content>
+                    <div>
+                        <!--  Template Name -->
+
+                        <div class="input-div">
+                            <blue-field [label]="'Template Name'" [for]="'template-name'">
+                                <input
+                                    blueInput
+                                    id="'template-name"
+                                    [(ngModel)]="templateName"
+                                    placeholder="Enter Template Name"
+                                />
+                            </blue-field>
+                        </div>
+
+                        <!-- Upload template button -->
+                        <button
+                            *ngIf="!fileUploaded"
+                            blueButton
+                            class="button-secondary button-sm mt-2"
+                            aria-label="upload"
+                            (click)="openUploadModal(modal)"
+                        >
+                            <svg blueIcon="upload"></svg>
+                            <span class="m-1">Upload Excel Template</span>
+                        </button>
+
+                        <div [hidden]="!fileUploaded" class="mt-2">
+                            <!-- Spreadsheet -->
+                            <ejs-spreadsheet
+                                #spreadsheet
+                                #default
+                                (fileMenuBeforeOpen)="fileMenuBeforeOpen($event)"
+                                openUrl="https://services.syncfusion.com/angular/production/api/spreadsheet/open"
+                                allowOpen="true"
+                                (openComplete)="onOpenComplete($event)"
+                                (contextMenuBeforeOpen)="contextMenuBeforeOpen($event)"
+                                [enableContextMenu]="true"
+                                (contextMenuItemSelect)="contextMenuItemSelect($event)"
+                            ></ejs-spreadsheet>
+
+                            <!-- Keys -->
+                            <blue-card class="mt-2">
+                                <blue-card-header>
+                                    <h1 blueContent="header-title">Template Keys</h1>
+                                </blue-card-header>
+                                <blue-divider></blue-divider>
+                                <blue-card-content>
+                                    <div *ngIf="keys.length === 0">There are no template keys defined</div>
+                                    <div *ngIf="keys.length > 0" class="m-1">
+                                        <table aria-describedby="keys" class="table table-bordered">
+                                            <tbody>
+                                                <tr *ngFor="let key of keys">
+                                                    <td>{{ key }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </blue-card-content>
+                            </blue-card>
+
+                            <!-- Template I/O Mappings -->
+                            <blue-card class="mt-2">
+                                <blue-card-header>
+                                    <h1 blueContent="header-title">Template I/O Mappings</h1>
+                                </blue-card-header>
+                                <blue-divider></blue-divider>
+                                <blue-card-content>
+                                    <div *ngIf="templateMappings.length === 0">
+                                        There are no template I/O mappings defined
+                                    </div>
+                                    <div *ngIf="templateMappings.length > 0" class="m-1">
+                                        <table aria-describedby="template-mappings" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="2" class="text-center">Input</th>
+                                                    <th colspan="2" class="text-center">Output</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Cell Range</th>
+                                                    <th>Cell Content</th>
+
+                                                    <th>Cell Range</th>
+                                                    <th>Formula</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let templateMapping of templateMappings">
+                                                    <td>{{ templateMapping.I_CellRange }}</td>
+                                                    <td>{{ templateMapping.I_CellValue }}</td>
+
+                                                    <td>{{ templateMapping.O_CellRange }}</td>
+                                                    <td>
+                                                        {{
+                                                            templateMapping.O_CellFormula
+                                                                ? templateMapping.O_CellFormula
+                                                                : 'NA'
+                                                        }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </blue-card-content>
+                            </blue-card>
+
+                            <!-- Template Table Mappings -->
+                            <blue-card class="mt-2">
+                                <blue-card-header>
+                                    <h1 blueContent="header-title">Template Table Mappings</h1>
+                                </blue-card-header>
+                                <blue-divider></blue-divider>
+                                <blue-card-content>
+                                    <div *ngIf="templateTableMappings.length === 0">
+                                        There are no template Table mappings defined
+                                    </div>
+
+                                    <div *ngIf="templateTableMappings.length > 0" class="m-1">
+                                        <table aria-describedby="template-table-mappings" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cell Range</th>
+                                                    <th>Columns</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let templateTableMapping of templateTableMappings">
+                                                    <td>{{ templateTableMapping.CellRange }}</td>
+                                                    <td>
+                                                        <blue-badge
+                                                            class="p-1 mx-1"
+                                                            *ngFor="let columnValue of templateTableMapping.Columns"
+                                                            [value]="columnValue"
+                                                        ></blue-badge>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </blue-card-content>
+                            </blue-card>
+                        </div>
+                    </div>
+                </blue-card-content>
+            </blue-card>
+        </blue-tabs-content>
+    </blue-tabs>
+    <!-- <div class="reveal">
+        <button
+            blueButton
+            theme="link"
+            blueRevealToggle
+            href="view"
+            [openedClass]="'toggle-open'"
+            [closedClass]="'toggle-closed'"
+        >
+            View Templates
+        </button>
+        <blue-reveal
+            class="inner-reveal"
+            id="view"
+            [isOpen]="isOpen"
+            [openedClass]="'reveal-open'"
+            [closedClass]="'reveal-closed'"
+        >
+            <div class="w-full p-6 bg-gray-100">
+                <blue-table [data]="data" #table>
+                    <ng-template blueTemplate="header">
+                        <tr blueTableHeaderRow sticky>
+                            <td blueTableHeaderCell>Template Name</td>
+                            <td blueTableHeaderCell>Meta Data</td>
+                            <td blueTableHeaderCell>Captured Data Points</td>
+                            <td blueTableHeaderCell>Captured Tables</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template blueTemplate="body" let-row="row">
+                        <tr [blueTableRow]="row">
+                            <td blueTableCell>{{ row.data.templateName }}</td>
+                            <td blueTableCell>{{ row.data.metadata }}</td>
+                            <td blueTableCell>{{ row.data.capturedPoints }}</td>
+                            <td blueTableCell>{{ row.data.capturedTables }}</td>
+                        </tr>
+                    </ng-template>
+                </blue-table>
+            </div>
+        </blue-reveal>
+    </div> -->
+
+    <!-- Upload template wizard -->
+
+    <div>
+        <blue-modal #modal>
+            <ng-container blueContent="title">Upload Excel Template</ng-container>
+            <ng-container blueContent="utils">
+                <button blueButton class="button-link" (click)="closeUploadModal(modal)" aria-label="close">
+                    <svg blueIcon="x" class="icon"></svg>
+                </button>
+            </ng-container>
+            <div class="block p-6">
+                <blue-file-upload name="files" [(ngModel)]="files" [fileCountLimit]="1"></blue-file-upload>
+            </div>
+
+            <ng-container blueContent="footer-end">
+                <button blueButton class="button-link" (click)="closeUploadModal(modal)">Cancel</button>
+                <button blueButton (click)="uploadExcelTemplate(modal)">Continue</button>
+            </ng-container>
+            <blue-spinner class="spinner-overlay spinner-md" label="Uploading..." *ngIf="uploading"></blue-spinner>
+        </blue-modal>
+    </div>
+</div>

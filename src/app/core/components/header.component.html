@@ -1,0 +1,76 @@
+<blue-header
+    (menuButtonClick)="menuFlyout.open()"
+    [enableMenuButton]="true"
+    [logoSize]="'lg'"
+    [logoTitle]="'Excel Template Ingestion Framework'"
+>
+    <ng-container blueContent="header-logo">
+        <img alt="Moody's Investors Service Logo" src="/assets/mis-logo.svg" />
+    </ng-container>
+
+    <ng-container blueContent="header-tools">
+        <button aria-label="Bell" blueButton class="button-link">
+            <svg blueIcon="bell"></svg>
+        </button>
+    </ng-container>
+
+    <ng-container blueContent="header-menu-bar">
+        <ul blueMenuBar>
+            <li *ngFor="let item of headerMenu">
+                <ng-container *ngIf="item.href">
+                    <a *ngIf="item.href" [attr.href]="item.href" [activateOnRoute]="true" blueMenuBarItem>{{ item.label }}</a>
+                </ng-container>
+
+                <ng-container *ngIf="item.route">
+                    <button [routerLink]="item.route" blueMenuBarItem role="menuitem">
+                        <svg *ngIf="item.icon" [blueIcon]="item.icon"></svg>
+                        <span>{{ item.label }}</span>
+                    </button>
+                </ng-container>
+
+                <ng-container *ngIf="item.children && item.children.length > 0">
+                    <button [toggleFor]="dropdown" blueMenuBarItem>{{ item.label }}</button>
+                    <blue-menu-bar-dropdown #dropdown>
+                        <ul blueMenu>
+                            <ng-container
+                                *ngTemplateOutlet="menuItemsTmpl; context: { $implicit: item.children }"
+                            ></ng-container>
+                        </ul>
+                    </blue-menu-bar-dropdown>
+                </ng-container>
+            </li>
+        </ul>
+    </ng-container>
+</blue-header>
+
+<blue-modal-flyout #menuFlyout [closeOnScrimClick]="true">
+    <ng-container blueContent="title">Menu</ng-container>
+    <ng-container blueContent="utils">
+        <button (click)="menuFlyout.close()" aria-label="close" blueButton class="button-link">
+            <svg blueIcon="x" class="icon"></svg>
+        </button>
+    </ng-container>
+
+    <ul blueMenu>
+        <ng-container *ngTemplateOutlet="menuItemsTmpl; context: { $implicit: headerMenu }"></ng-container>
+    </ul>
+</blue-modal-flyout>
+
+<ng-template #menuItemsTmpl let-menu>
+    <li *ngFor="let item of menu">
+        <ng-container *ngIf="item.href">
+            <a *ngIf="item.href" [attr.href]="item.href" blueMenuItem>{{ item.label }}</a>
+        </ng-container>
+
+        <ng-container *ngIf="item.route">
+            <a [routerLink]="item.route" blueMenuItem>{{ item.label }}</a>
+        </ng-container>
+
+        <ng-container *ngIf="item.children && item.children.length > 0">
+            <button [toggleFor]="submenu" blueMenuItem>{{ item.label }}</button>
+            <ul #submenu blueMenuGroup>
+                <ng-container *ngTemplateOutlet="menuItemsTmpl; context: { $implicit: item.children }"></ng-container>
+            </ul>
+        </ng-container>
+    </li>
+</ng-template>

@@ -1,0 +1,21 @@
+@use '@moodys/blue-styles/dist/blue' as bl;
+
+.badge-div {
+    @include bl.apply('flex', 'p-2', 'space-x-2');
+}
+
+.save {
+    @include bl.apply('flex', 'justify-end', 'space-y-4');
+}
+
+.reveal {
+    @include bl.apply('pb-4');
+}
+
+.inner-reveal {
+    @include bl.apply('pt-4');
+}
+
+.input-div {
+    @include bl.apply('w-1/2');
+}

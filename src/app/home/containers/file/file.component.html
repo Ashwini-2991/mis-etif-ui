@@ -1,0 +1,24 @@
+<div>
+    <button blueButton class="button-secondary button-sm" aria-label="upload" (click)="openUploadModal(modal)">
+        <svg blueIcon="upload"></svg>
+        <span class="m-1">Upload File</span>
+    </button>
+
+    <blue-modal #modal>
+        <ng-container blueContent="title">Upload File</ng-container>
+        <ng-container blueContent="utils">
+            <button blueButton class="button-link" (click)="closeUploadModal(modal)" aria-label="close">
+                <svg blueIcon="x" class="icon"></svg>
+            </button>
+        </ng-container>
+        <div class="block p-6">
+            <blue-file-upload name="files" [(ngModel)]="files" [fileCountLimit]="1"></blue-file-upload>
+        </div>
+
+        <ng-container blueContent="footer-end">
+            <button blueButton class="button-link" (click)="closeUploadModal(modal)">Cancel</button>
+            <button blueButton (click)="uploadExcelFile(modal)">Continue</button>
+        </ng-container>
+        <blue-spinner class="spinner-overlay spinner-md" label="Uploading..." *ngIf="uploading"></blue-spinner>
+    </blue-modal>
+</div>

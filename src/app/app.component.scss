@@ -1,0 +1,10 @@
+@use '@moodys/blue-styles/dist/blue' as bl;
+
+:host {
+    @include bl.apply('relative', 'flex', 'flex-col');
+    min-height: 100vh;
+}
+
+.main-content {
+    @include bl.apply('flex-1', 'p-4', 'w-full', 'mx-auto');
+}

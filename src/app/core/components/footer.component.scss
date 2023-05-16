@@ -1,0 +1,22 @@
+@use '@moodys/blue-styles/dist/blue' as bl;
+
+footer {
+    @include bl.apply(
+            'block',
+            'bg-gray-100',
+            'border-t',
+            'border-gray-300',
+            'p-4',
+            'text-sm',
+            'text-gray-700',
+            'leading-normal'
+    );
+}
+
+@include bl.breakpoint('lg') {
+    footer {
+        &-grid {
+            @include bl.apply('grid-cols-3', 'gap-4');
+        }
+    }
+}

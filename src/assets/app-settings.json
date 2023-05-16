@@ -1,0 +1,17 @@
+{
+    "auth": {
+        "oktaOptions": {
+            "clientId": "exampleClientId",
+            "issuer": "https://exampleokta.com"
+        }
+    },
+    "featureFlag": {
+        "core": {
+            "authorizationKey": "exampleAuthorizationKey"
+        }
+    },
+    "analytics": {
+        "orgId": "1707TR"
+    },
+    "environment": "dev"
+}

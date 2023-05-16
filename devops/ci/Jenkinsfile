@@ -1,0 +1,56 @@
+def application
+def gitRepo
+def sonarScanArgs
+
+pipeline {
+    agent { node { label "mdp-aws-node-nprd" } }
+    options {
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))
+    }
+    environment {
+        MDP_HOME = "/opt/mdp/app"
+    }
+    tools {
+        jdk "JDK1.8"
+        maven "Maven-3.6.1"
+        nodejs "node-v16.18.0"
+    }
+    stages {
+        stage("Setup") {
+            steps {
+                script {
+                    sonarScanArgs = "-Dsonar.projectKey=com.moodys.ui.angular-starter-app -Dsonar.branch.name=${BRANCH_NAME} -Dsonar.test.inclusions=**/*.spec.ts -Dsonar.typescript.lcov.reportPaths=coverage/lcov.info  -Dsonar.exclusions=**/e2e/**/*,**/node_modules/**/*,**/dist/**/*,**/coverage/**/*,.prettierrc.js,**/karma.*.js,**/environments/*.ts,**/test/**/*.ts,src/main.ts,src/test.ts"
+                }
+            }
+        }
+        stage("Build") {
+            steps {
+                sh "export PATH=$PATH:/usr/bin/npm:/root/.nvm/versions/node/v16.8.0/bin"
+                sh "npm ci"
+                sh "npm run lint"
+                sh "npm run build:prod"
+            }
+        }
+        stage("Test") {
+            steps {
+                sh "npm run test:ci"
+                withSonarQubeEnv('sonarqube-mdp-dev'){
+                    sh "$MDP_HOME/lib/sonar-scanner-4.5.0.2216-linux/bin/sonar-scanner ${sonarScanArgs}"
+                }
+                waitForQualityGate abortPipeline: true
+            }
+        }
+    }
+    post {
+        always {
+            echo "Pipeline Execution Completed"
+        }
+        success {
+            echo "Pipeline Execution Success"
+        }
+        failure {
+            echo "Pipeline Execution Failure"
+        }
+    }
+}

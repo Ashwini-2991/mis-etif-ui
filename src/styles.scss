@@ -1,0 +1,22 @@
+// These two should only appear in your project ONCE, and are required. Base styles.scss is great place to put it.
+@use '@moodys/blue-styles/dist/blue';
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+@include blue.base();
+
+// If you also want to include the utility classes.
+// @include blue.utilities();
+// WARNING: Doing this will increase style size to ~2MB. This is not recommended
+// See README: https://mdpgit-live.app.mis.tld/projects/UI/repos/blue-styles/browse?at=refs%2Fheads%2Fmaster
+
+//Syncfuncion
+@import '../node_modules/@syncfusion/ej2-base/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-lists/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-navigations/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-spreadsheet/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-grids/styles/material.css';
