@@ -18,7 +18,9 @@
         <ul blueMenuBar>
             <li *ngFor="let item of headerMenu">
                 <ng-container *ngIf="item.href">
-                    <a *ngIf="item.href" [attr.href]="item.href" [activateOnRoute]="true" blueMenuBarItem>{{ item.label }}</a>
+                    <a *ngIf="item.href" [attr.href]="item.href" [activateOnRoute]="true" blueMenuBarItem>
+                        {{ item.label }}
+                    </a>
                 </ng-container>
 
                 <ng-container *ngIf="item.route">

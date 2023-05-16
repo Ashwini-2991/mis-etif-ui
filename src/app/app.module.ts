@@ -17,7 +17,7 @@ import { EmtnAuthModule } from '@moodys/emtn-ng/auth';
         CoreModule,
         EmtnAuthModule,
         HttpClientModule,
-        SharedModule,
+        SharedModule
     ],
     providers: [],
     bootstrap: [AppComponent]

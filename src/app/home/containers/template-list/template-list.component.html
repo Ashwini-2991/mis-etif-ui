@@ -18,11 +18,11 @@
                 <ng-template blueTemplate="body" let-row="row">
                     <tr [blueTableRow]="row">
                         <td blueTableCell>{{ row.data.name }}</td>
-                        <td blueTableCell>{{ row.data.templateMetadata.FileName }}</td>
+                        <td blueTableCell>{{ row.data.templateMetadata?.FileName }}</td>
                         <td blueTableCell>
                             <blue-badge
                                 class="p-1 mx-1"
-                                *ngFor="let sheetName of row.data.templateMetadata.SheetNames"
+                                *ngFor="let sheetName of row.data.templateMetadata?.SheetNames"
                                 [value]="sheetName"
                             ></blue-badge>
                         </td>

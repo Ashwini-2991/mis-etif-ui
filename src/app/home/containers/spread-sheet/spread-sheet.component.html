@@ -1,11 +1,11 @@
 <div>
     <blue-tabs>
         <blue-tabs-bar>
-            <a blueTabsButton href="tab-template-list" [active]="true">Templates</a>
-            <a blueTabsButton href="tab-template-create">Create Template</a>
+            <a blueTabsButton #templateListTab href="tab-template-list" [active]="true">Templates</a>
+            <a blueTabsButton #templateCreateTab href="tab-template-create">Create Template</a>
         </blue-tabs-bar>
         <blue-tabs-content id="tab-template-list">
-            <app-template-list></app-template-list>
+            <app-template-list [templates]="templates"></app-template-list>
         </blue-tabs-content>
         <blue-tabs-content id="tab-template-create">
             <!-- Create Template -->
@@ -164,49 +164,8 @@
             </blue-card>
         </blue-tabs-content>
     </blue-tabs>
-    <!-- <div class="reveal">
-        <button
-            blueButton
-            theme="link"
-            blueRevealToggle
-            href="view"
-            [openedClass]="'toggle-open'"
-            [closedClass]="'toggle-closed'"
-        >
-            View Templates
-        </button>
-        <blue-reveal
-            class="inner-reveal"
-            id="view"
-            [isOpen]="isOpen"
-            [openedClass]="'reveal-open'"
-            [closedClass]="'reveal-closed'"
-        >
-            <div class="w-full p-6 bg-gray-100">
-                <blue-table [data]="data" #table>
-                    <ng-template blueTemplate="header">
-                        <tr blueTableHeaderRow sticky>
-                            <td blueTableHeaderCell>Template Name</td>
-                            <td blueTableHeaderCell>Meta Data</td>
-                            <td blueTableHeaderCell>Captured Data Points</td>
-                            <td blueTableHeaderCell>Captured Tables</td>
-                        </tr>
-                    </ng-template>
-                    <ng-template blueTemplate="body" let-row="row">
-                        <tr [blueTableRow]="row">
-                            <td blueTableCell>{{ row.data.templateName }}</td>
-                            <td blueTableCell>{{ row.data.metadata }}</td>
-                            <td blueTableCell>{{ row.data.capturedPoints }}</td>
-                            <td blueTableCell>{{ row.data.capturedTables }}</td>
-                        </tr>
-                    </ng-template>
-                </blue-table>
-            </div>
-        </blue-reveal>
-    </div> -->
 
     <!-- Upload template wizard -->
-
     <div>
         <blue-modal #modal>
             <ng-container blueContent="title">Upload Excel Template</ng-container>

@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { BlueTableData } from '@moodys/blue-ng';
-import { baseUrl } from '@app/helper';
 import { Template } from '@app/home/types/Template';
 
 @Component({
@@ -9,26 +7,20 @@ import { Template } from '@app/home/types/Template';
     templateUrl: './template-list.component.html',
     styleUrls: ['./template-list.component.scss']
 })
-export class TemplateListComponent implements OnInit {
+export class TemplateListComponent implements OnChanges {
     processing = false;
     templateData: BlueTableData = [];
 
-    constructor(private httpClient: HttpClient) {}
+    @Input()
+    templates: Template[] = [];
 
-    ngOnInit(): void {
+    ngOnChanges(): void {
         this.processing = true;
-        this.httpClient.get(`${baseUrl}/templates`).subscribe({
-            next: (res: any) => {
-                const templates: Template[] = res.data;
-                templates.forEach((template) => {
-                    this.templateData.push({ data: template });
-                });
-                this.processing = false;
-            },
-            error: (err: unknown) => {
-                console.log(err);
-                this.processing = false;
-            }
+        const templateDataTemp: BlueTableData = [];
+        this.templates.forEach((template) => {
+            templateDataTemp.push({ data: template });
         });
+        this.templateData = [...templateDataTemp];
+        this.processing = false;
     }
 }

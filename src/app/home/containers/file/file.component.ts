@@ -11,8 +11,6 @@ export class FileComponent {
     files!: File[];
     uploadedFile!: File;
 
-    constructor() {}
-
     uploadExcelFile(modal: BlueModal): void {
         this.uploading = true;
         this.uploadedFile = this.files[0];

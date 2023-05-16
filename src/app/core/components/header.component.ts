@@ -19,23 +19,5 @@ export class HeaderComponent {
             route: ['templates'],
             icon: 'file-text'
         }
-            
-        // {
-        //     label: 'Parent Page 2',
-        //     children: [
-        //         {
-        //             label: 'Menu Item 2.A',
-        //             href: '#'
-        //         },
-        //         {
-        //             label: 'MenuItem 2.B',
-        //             href: '#'
-        //         }
-        //     ]
-        // },
-        // {
-        //     label: 'Help',
-        //     route: ['/help']
-        // } 
     ];
 }

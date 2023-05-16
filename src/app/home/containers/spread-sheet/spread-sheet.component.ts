@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { TemplateCell } from '@app/home/types/TemplateCell';
 import { TemplateMetadata } from '@app/home/types/TemplateMetadata';
 import { TemplateIOMapping, TemplateTableMapping } from '@app/home/types/TemplateMapping';
@@ -6,17 +6,24 @@ import { SpreadsheetComponent, CellModel } from '@syncfusion/ej2-angular-spreads
 import { lettersToNumber } from '@app/shared/helper';
 import { BlueModal } from '@moodys/blue-ng';
 import { BlueToastData, BlueToastRole, BlueToastService, BlueToastTheme } from '@moodys/blue-ng';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { baseUrl } from '@app/helper';
+import { Template } from '@app/home/types/Template';
 
 @Component({
     selector: 'app-spread-sheet',
     templateUrl: './spread-sheet.component.html',
     styleUrls: ['./spread-sheet.component.scss']
 })
-export class SpreadSheetComponent {
+export class SpreadSheetComponent implements OnInit {
     @ViewChild('spreadsheet')
     spreadsheetObj!: SpreadsheetComponent;
+
+    @ViewChild('templateListTab')
+    templateListTab!: ElementRef;
+
+    @ViewChild('templateCreateTab')
+    templateCreateTab!: ElementRef;
 
     templateName = '';
     keys: string[] = [];
@@ -37,6 +44,7 @@ export class SpreadSheetComponent {
     uploadedFile!: File;
     fileUploaded = false;
     processing = false;
+    templates: Template[] = [];
 
     error: BlueToastData = {
         title: 'Failed to save template.',
@@ -60,7 +68,25 @@ export class SpreadSheetComponent {
 
     constructor(private _toastService: BlueToastService, private httpClient: HttpClient) {}
 
-    fileMenuBeforeOpen(args: any) {
+    ngOnInit(): void {
+        this.getTemplates();
+    }
+
+    getTemplates() {
+        this.processing = true;
+        this.httpClient.get(`${baseUrl}/templates`).subscribe({
+            next: (res: any) => {
+                this.templates = res.data;
+                this.processing = false;
+            },
+            error: (err: unknown) => {
+                console.log(err);
+                this.processing = false;
+            }
+        });
+    }
+
+    fileMenuBeforeOpen() {
         this.spreadsheetObj.hideFileMenuItems(['Save As'], true);
     }
 
@@ -218,8 +244,18 @@ export class SpreadSheetComponent {
             formData.append('file', this.uploadedFile);
 
             this.httpClient.post(`${baseUrl}/create/template`, formData).subscribe({
-                next: (res: any) => {
+                next: () => {
+                    const template: Template = {
+                        name: data.name,
+                        capturedPoints: data.templateMappings.length,
+                        capturedTables: data.templateTableMappings.length,
+                        templateMetadata: data.templateMetadata
+                    };
+                    const templateList = [...this.templates];
+                    templateList.push({ ...template });
+                    this.templates = [...templateList];
                     this.launchToast(this.saveSuccess);
+                    this.templateListTab.nativeElement.click();
                     this.processing = false;
                 },
                 error: (err: unknown) => {
